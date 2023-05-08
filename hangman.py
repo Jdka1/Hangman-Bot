@@ -6,7 +6,8 @@ class Hangman:
     def __init__(self):
         self.dictionary = self.read_words()
         self.possible_words = self.dictionary
-        self.possible_letters = string.ascii_lowercase
+        self.possible_letters = [l for l in string.ascii_lowercase]
+        self.guesses = 0
 
     def read_words(self):
         with open('words_alpha.txt', 'r') as f:
@@ -29,11 +30,25 @@ class Hangman:
     def get_all_infos(self, letters, words):
         expected_infos = { letter: self.get_expected_info(letter, self.possible_words) for letter in letters }
         return expected_infos
+    
+    def guess(self, letter):
+        guesses += 1
+        self.possible_letters.remove(letter)
+        response = input(f'Is {letter} in your word? (y/n)\n')
+        if response.lower() == 'y':
+            self.possible_letters.remove(letter)
 
-    def game(self, length):
-        self.possible_words = [word for word in self.dictionary if len(word) == length]
+        print(self.possible_letters)
+
+
+    def game(self, word_length):
+        self.possible_words = [word for word in self.dictionary if len(word) == word_length]
+
         expected_info = self.get_all_infos(self.possible_letters, self.possible_words)
-        print(sorted(expected_info.items(), key=lambda x: x[1], reverse=True))
+        expected_info = sorted(expected_info.items(), key=lambda x: x[1], reverse=True)
+        self.guess(expected_info[0][0])
 
+
+print('\n' * 20)
 game = Hangman()
-game.game(15)
+game.game(5)
