@@ -70,19 +70,21 @@ class Hangman:
         while True:
             expected_info = self.get_all_infos(self.possible_letters, self.possible_words)
             expected_info = sorted(expected_info.items(), key=lambda x: x[1], reverse=True)
-            best_guess = expected_info[0][0]
-            self.guess(best_guess)
+            if len(self.possible_words) == 1:
+                print(f"Is your word {''.join(self.possible_words[0])}?  |    {self.guesses} guesses")
+                break
+            else:
+                best_guess = expected_info[0][0]
+                self.guess(best_guess)
             
             print(f"{' '.join(['_' if letter == 0 else letter for letter in self.cur_info])}  {len(self.possible_words)} possible words\n")
 
             if len(self.possible_words) == 0:
-                print("I don't know that word")
-                break
-            if 0 not in self.cur_info:
-                print(f"Is your word {''.join(self.cur_info)}?")
+                print(f"I don't know that word  |  {self.guesses} guesses")
                 break
 
 
 print('\n' * 20)
 game = Hangman()
-game.game(7)
+length = int(input("How long is your word?\n"))
+game.game(length)
